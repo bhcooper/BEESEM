@@ -1,0 +1,60 @@
+The BEESEM (Binding Energy Estimation on SELEX with Expectation Maximization) program is designed for transcription factor binding motif discovery using HT-SELEX data. It is released under GNU GPLv3. It requires Python 2.7 and the following Python packages:
+
+numpy, scipy, matplotlib, openopt.
+
+To install the BEESEM package:
+python setup.py install
+
+################################################################################
+To execute the BEESEM program, please follow the instructions below.
+
+usage: beesem.py [-h] [-f FLANKING FLANKING] [-l LENGTH] [-o OUTPUT]
+                 [-p PHASE] [-s SEED] [-v]
+                 uid inputs [inputs ...]
+
+positional arguments:
+  uid                   unique name of this experiment
+  inputs                one or two input sequence file(s)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FLANKING FLANKING, --flanking FLANKING FLANKING
+                        two flanking sequences (optional)
+  -l LENGTH, --length LENGTH
+                        motif length (optional)
+  -o OUTPUT, --output OUTPUT
+                        output directory (optional, default: current working directory)
+  -p PHASE, --phase PHASE
+                        number of expectation-maximization rounds (optional, default: 10)
+  -s SEED, --seed SEED  consensus sequence (optional)
+  -v, --version         show program's version number and exit
+
+Note:
+1. If there are two input files, the first one will be used to compute the prior distribution of the DNA sequences.
+2. The input file should contain only two columns. The first column contains the DNA sequences (with no flanking sequences) and the second column contains the corresponding sequence counts. To convert FASTA or FASTQ files into the proper format, please use the formatter.py Python script.
+3. The flanking sequences should be two strings containing only A, C, G and T.
+4. If the length parameter is not specified but a seed sequence is provided, the length of the seed will define the length of the motif.
+5. The seed should be a string containing only A, C, G and T.
+
+################################################################################
+To format input files, please follow the instructions below.
+
+usage: formatter.py [-h] [-o OUTPUT] input
+
+positional arguments:
+  input                 input file path
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        output file path (optional)
+
+Note:
+The extension of the input file should be either .fasta or .fastq.
+
+################################################################################
+Author:
+Shuxiang Ruan (sruan@wustl.edu), Washington University in St. Louis
+
+Reference:
+Ruan S, Swamidass SJ, Stormo GD. BEESEM: estimation of binding energy models using HT-SELEX data. Bioinformatics (2017)
