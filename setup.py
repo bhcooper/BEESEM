@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
     name='BEESEM',
     version='1.0.0',
-    packages=['NN', 'NN.model', 'toolbox'],
+    packages=['toolbox'],
     url='http://stormo.wustl.edu/resources.html',
     license='GNU GPLv3',
     author='Shuxiang Ruan',
