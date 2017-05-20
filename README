@@ -53,6 +53,9 @@ Note:
 The extension of the input file should be either .fasta or .fastq.
 
 ################################################################################
+Note:
+The BEESEM program released on this website is less computationally efficient than the version described in the Bioinformatics paper, because the original version uses proprietary code that must be replaced to make BEESEM open-source. This change does not affect the parameter estimation accuracy.
+
 Author:
 Shuxiang Ruan (sruan@wustl.edu), Washington University in St. Louis
 
