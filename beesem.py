@@ -98,16 +98,35 @@ def IN(curr_path, prev_path, train_set, enc, templ, model, reduce_size,
     start = (width - base_width) / 2
     stop = start + base_width
 
-    model.SetData(Product(BASES, base_width))
-    pred = Op.Nom(model.EFactors())
-    avg_prob = 1.0 / len(pred)
-
     lib_long = MakeLib(curr_path, base_width, templ)
     """:type: ContigLibrary"""
     n_reads = lib_long.Sum()
 
+    n_total_seqs = len(BASES) ** base_width
+    avg_prob = 1.0 / n_total_seqs
+    cutoff_motif_length = 11
+    if base_width <= cutoff_motif_length:
+        model.SetData(Product(BASES, base_width))
+        pred = model.EFactors()
+        sum_pred = float(sum(pred.itervalues()))
+        assert len(pred) == n_total_seqs
+    else:
+        model.SetData(lib_long.Iter())
+        pred = model.EFactors()
+        sum_pred = float(sum(pred.itervalues()))
+
+        n = len(pred)
+        pwm = model.OnlyPWM()
+        for x in itt.product(BASES, repeat=base_width):
+            key = ''.join(x)
+            if key not in pred:
+                code = model.Encode(key)
+                sum_pred += np.exp(np.dot(code, pwm))
+                n += 1
+        assert n == n_total_seqs
+
     for rec in lib_long.itervalues():
-        f1 = np.mean([pred[seq] for seq in rec.contigs]) * lambda0
+        f1 = np.mean([pred[seq]/sum_pred for seq in rec.contigs]) * lambda0
         f2 = avg_prob * (1 - lambda0)
         rec.count *= f1 / (f1 + f2)
     lambda1 = lib_long.Sum() / n_reads
@@ -127,10 +146,10 @@ def IN(curr_path, prev_path, train_set, enc, templ, model, reduce_size,
         lib1.Rescale(div)
 
     if reduce_size:
-        if enc.encoding in Encoder.decoder:  # likely extension case
-            consensus = max(pred, key=pred.get)
-        elif len(enc.encoding) == base_width:
+        if len(enc.encoding) == base_width:
             consensus = enc.encoding
+        elif enc.encoding in Encoder.decoder:  # likely extension case
+            raise NotImplementedError
         else:
             raise ValueError
 
@@ -293,7 +312,7 @@ def driver():
     parser.add_argument('-p', '--phase', type=int, default=10,
                         help='number of expectation-maximization rounds (optional, default: 10)')
     parser.add_argument('-s', '--seed', help='consensus sequence (optional)')
-    parser.add_argument('-v', '--version', action='version', version='1.0.0')
+    parser.add_argument('-v', '--version', action='version', version='1.0.1')
 
     kwargs = vars(parser.parse_args())
 
