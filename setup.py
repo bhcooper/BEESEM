@@ -9,5 +9,7 @@ setup(
     license='GNU GPLv3',
     author='Shuxiang Ruan',
     author_email='sruan@wustl.edu',
-    description=''
+    description='',
+    scripts=['beesem.py', 'formatter.py'],
+    py_modules=['SequenceModel', 'tools', 'universal'],
 )
