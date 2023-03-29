@@ -1,9 +1,10 @@
 The BEESEM (Binding Energy Estimation on SELEX with Expectation Maximization) program is designed for transcription factor binding motif discovery using HT-SELEX data. It is released under GNU GPLv3. It requires Python 2.7 and the following Python packages:
 
-numpy, scipy, matplotlib, openopt.
+pip install numpy scipy matplotlib
+pip install openopt
 
 To install the BEESEM package:
-python setup.py install
+pip install .
 
 ################################################################################
 To execute the BEESEM program, please follow the instructions below.
