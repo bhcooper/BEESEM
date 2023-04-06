@@ -106,7 +106,7 @@ def IN(curr_path, prev_path, train_set, enc, templ, model, reduce_size,
 
     n_total_seqs = len(BASES) ** base_width
     avg_prob = 1.0 / n_total_seqs
-    cutoff_motif_length = 11
+    cutoff_motif_length = 13
     if base_width <= cutoff_motif_length:
         model.SetData(Product(BASES, base_width))
         pred = model.EFactors()
